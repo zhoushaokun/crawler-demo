@@ -1,36 +1,36 @@
 
 const request = require('request');
-const { getBeautyFormDom } = require('./dom');
+const { getBeautyFormDomV2 } = require('./dom');
 const { writeJson } = require('./io');
 
-
-const res = [];
-
-const requestBeauty = url => {
-
-    // 处理dom文本
-    function getBeautyImages(url) {
-        return new Promise((resolve, reject) => {
-            request.get({ url }, function optionalCallback(err, httpResponse, body) {
-                if (err) {
-                    return console.error('upload failed:', err);
-                }
-                resolve({ text: body.toString(), url, isContinue: true, nextRequest: requestBeauty, });
-            });
-        }).then(getBeautyFormDom);
-    }
-
-    return getBeautyImages(url)
-        .then(([data, isFinish]) => {
-            res.push(...data);
-            if (isFinish) {
-                writeJson({ res }, './data/hot.json');
+const getBeautyDomStrV2 = async url => { 
+    return new Promise((resolve, reject) => {
+        request.get({ url }, function optionalCallback(err, httpResponse, body) {
+            if (err) {
+                reject(err);
+                return console.error('upload failed:', err);
             }
-        }).catch(e => {
-            console.log('e', e)
+            resolve(body.toString());
         });
+    })
+};
+
+const requestBeautyV2 = async url => { 
+    let nextUrl = url, result = [];
+
+    let isContinue = true;
+    const final = [];
+    console.log('nextUrl :>> ', nextUrl);
+    while (isContinue) { 
+        const response = await getBeautyDomStrV2(nextUrl);
+        [result, nextUrl] = getBeautyFormDomV2(response, nextUrl);
+        final.push(...result);
+        isContinue = !!nextUrl;
+    }
+    const msg = await writeJson({ res: final }, './data/hot.json');
+    console.log('msg :>> ', msg);
 };
 
 module.exports = {
-    requestBeauty,
+    requestBeautyV2,
 };

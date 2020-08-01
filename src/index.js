@@ -1,7 +1,7 @@
-const { requestBeauty } = require('./api');
+const { requestBeauty, requestBeautyV2 } = require('./api');
 
 const test = (url) => {
-    requestBeauty(url)
+    requestBeautyV2(url)
 };
 
 const homeUrl = 'https://www.mzitu.com/hot/';

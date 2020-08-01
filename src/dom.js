@@ -1,13 +1,14 @@
 const cheerio = require("cheerio");
 
-function getBeautyFormDom({ text, url, isContinue, nextRequest}) {
+function getBeautyFormDomV2(text, url) {
     const $ = cheerio.load(text);
     const isFinish = $('.next').length === 0;
-    if (isContinue && !isFinish) {
-        const nextUrl = $('.next').attr('href');
-        nextRequest(nextUrl);
-    }
+    let nextUrl = '';
     const result = [];
+
+    if (!isFinish) {
+        nextUrl = $('.next').attr('href');
+    }
     $('.lazy').each((index, ele) => {
         result.push({
             name: $(ele).attr('alt'),
@@ -15,9 +16,9 @@ function getBeautyFormDom({ text, url, isContinue, nextRequest}) {
             url,
         });
     });
-    return [result, isFinish];
+    return [result, nextUrl];
 }
 
 module.exports = {
-    getBeautyFormDom,
+    getBeautyFormDomV2,
 };

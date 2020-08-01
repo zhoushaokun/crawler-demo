@@ -1,6 +1,6 @@
 
 const request = require('request');
-const { getBeautyFormDomV2 } = require('./dom');
+const { getBeautyFromDomV2 } = require('./dom');
 const { writeJson } = require('./io');
 
 const getBeautyDomStrV2 = async url => { 
@@ -24,7 +24,7 @@ const requestBeautyV2 = async url => {
         console.log('nextUrl :>> ', nextUrl);
         while (isContinue) { 
             const response = await getBeautyDomStrV2(nextUrl);
-            [result, nextUrl] = getBeautyFormDomV2(response, nextUrl);
+            [result, nextUrl] = getBeautyFromDomV2(response, nextUrl);
             final.push(...result);
             isContinue = !!nextUrl;
         }

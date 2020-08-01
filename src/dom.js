@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 
-function getBeautyFormDomV2(text, url) {
+function getBeautyFromDomV2(text, url) {
     const $ = cheerio.load(text);
     const isFinish = $('.next').length === 0;
     let nextUrl = '';
@@ -20,5 +20,5 @@ function getBeautyFormDomV2(text, url) {
 }
 
 module.exports = {
-    getBeautyFormDomV2,
+    getBeautyFromDomV2,
 };

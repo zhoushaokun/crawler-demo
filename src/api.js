@@ -16,19 +16,23 @@ const getBeautyDomStrV2 = async url => {
 };
 
 const requestBeautyV2 = async url => { 
-    let nextUrl = url, result = [];
+    try {
+        let nextUrl = url, result = [];
 
-    let isContinue = true;
-    const final = [];
-    console.log('nextUrl :>> ', nextUrl);
-    while (isContinue) { 
-        const response = await getBeautyDomStrV2(nextUrl);
-        [result, nextUrl] = getBeautyFormDomV2(response, nextUrl);
-        final.push(...result);
-        isContinue = !!nextUrl;
+        let isContinue = true;
+        const final = [];
+        console.log('nextUrl :>> ', nextUrl);
+        while (isContinue) { 
+            const response = await getBeautyDomStrV2(nextUrl);
+            [result, nextUrl] = getBeautyFormDomV2(response, nextUrl);
+            final.push(...result);
+            isContinue = !!nextUrl;
+        }
+        const msg = await writeJson({ res: final }, './data/hot.json');
+        console.log('msg :>> ', msg);
+    } catch (err) {
+        throw new Error(err);
     }
-    const msg = await writeJson({ res: final }, './data/hot.json');
-    console.log('msg :>> ', msg);
 };
 
 module.exports = {
